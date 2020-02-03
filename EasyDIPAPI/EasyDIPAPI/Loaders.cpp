@@ -25,16 +25,20 @@ namespace CG
 		glm::vec3 buffer;
 		std::vector<glm::vec3> vertex;
 		std::vector<glm::vec3> faces;
+		std::vector<glm::vec3> colors;
+		std::vector<std::vector<int>> faceIndex;
+		std::vector<glm::vec3> faceColors;
 		std::string pend;
-		int act = 1, v, f, e = 0;
+		int act = 1, r, v, f, e = 0;
 		float x, y, z;
 
-		ifs.open("C:/Users/skandergod/Desktop/CG3-P1-master/EasyDIPClient/EasyDIPClient/Objects/Object.off", std::ifstream::in);
+		ifs.open("C:/Users/Daniel/Desktop/proyectos/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/Object.off", std::ifstream::in);
 		
 
 		while (act) {
 			ifs >> line;
 			std::cout << "ignoring line: " << line << std::endl;
+			std::cout << std::regex_match(line, integer) << std::endl;
 			if (std::regex_match(line,integer)) {
 				act = 0;
 			}
@@ -65,7 +69,7 @@ namespace CG
 		for (int i = act; i < v; ++i) {
 			ifs >> line;
 
-			while (!(std::regex_match(line, integer)) || !(std::regex_match(line, integer))){
+			while (!(std::regex_match(line, decimal)) || !(std::regex_match(line, integer))){
 				ifs >> line;
 			}
 
@@ -84,16 +88,46 @@ namespace CG
 		std::cout << "vertexs loaded" << std::endl;
 
 		for (int i = 0; i < f; ++i) {
-			int a[1], j=0;
-			std::getline(ifs, line);
-			std::cout << line << std::endl;
-			/*while (line != "") {
-				std::cout << line << std::endl;
+			std::vector<int> temp;
+			
+			while (act) {
+				ifs >> line;
+				//std::cout << "ignoring line: " << line << std::endl;
+				std::cout << std::regex_match(line, integer) << std::endl;
+				if (std::regex_match(line, integer)) {
+					act = 0;
+				}
+				else if (std::regex_match(line, decimal)) {
+					std::vector<float> temp;
+					x = std::strtof((line).c_str(), 0);
+					ifs >> line;
+					y = std::strtof((line).c_str(), 0);
+					ifs >> line;
+					z = std::strtof((line).c_str(), 0);
+					faceColors.push_back(glm::vec3(x, y, z));
+				}
+			}
 
-				int a[j];
+			r = std::stoi(line);
+			act = 1;
 
-			}*/
+			for (int i = 0; i < r; ++i) {
+				
+				/*while (act) {
+					ifs >> line;
+					//std::cout << "ignoring line: " << line << std::endl;
+					std::cout << std::regex_match(line, integer) << std::endl;
+					if (std::regex_match(line, integer)) {
+						act = 0;
+					}
+				}*/
+				//act = 1;
+				ifs >> line;
+				temp.push_back(std::stoi(line));
 
+				//faceIndex.push_back(temp);
+			}
+			faceIndex.push_back(temp);
 		}
 
 

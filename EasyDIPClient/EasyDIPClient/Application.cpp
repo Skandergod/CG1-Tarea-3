@@ -212,18 +212,18 @@ void Application::ImGui()
 
 	//if (ImGui::Button("Load Image"))
 	//{
-	//	fileDialog.Open();
+		//fileDialog.Open();
 	//}
-	//	fileDialog.Display();
+		//fileDialog.Display();
 
 
-	//if (fileDialog.HasSelected())
-	//{
-	//	std::cout << "Selected filename" << fileDialog.GetSelected().string() << std::endl;
-	//	
-	/*	fileDialog.Close();
-		fileDialog.ClearSelected();*/
-	//}
+	/*if (filedialog.hasselected())
+	{
+		std::cout << "selected filename" << filedialog.getselected().string() << std::endl;
+		
+		filedialog.close();
+		filedialog.clearselected();
+	}*/
 
 	if (ImGui::Button("Load .off"))
 	{	
