@@ -4,15 +4,17 @@
 
 
 class Object {
-	static Object* instance;
-	int **vertex;
+	//static Object* instance;
+	
+public:
+	int** vertex;
 	static unsigned int VBO, VAO;
 	Object();
 	~Object();
-public:
 	void Draw();
 	void Bind();
-	static Object* Instance();
+	//void Object();
+	//static Object* Instance();
 };
 
 

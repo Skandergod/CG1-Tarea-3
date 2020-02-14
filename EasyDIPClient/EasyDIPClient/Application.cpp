@@ -4,8 +4,10 @@
 #include <../../EasyDIPAPI/EasyDIPAPI/EDpch.h>
 #include <../../EasyDIPAPI/EasyDIPAPI/Loaders.h>
 #include <fstream>
+#include <../../EasyDIPAPI/EasyDIPAPI/Object.h>
 
 extern Shader* bwShader;
+Object* hi;
 
 Application::Application() {
 
@@ -140,15 +142,15 @@ void Application::MainLoop()
 void Application::Render()
 {
 
-	Object *Object = Object::Instance();
+	Object *object = new Object();
 	if (bwShader) {
 		bwShader->use();
 		glActiveTexture(0);
 		glBindTexture(GL_TEXTURE_2D, texId);
 		bwShader->setInt("tex", 0);
 		bwShader->setFloat("test", test);
-		Object->Bind();
-		Object->Draw();
+		object->Bind();
+		object->Draw();
 
 	}
 }
@@ -227,8 +229,33 @@ void Application::ImGui()
 
 	if (ImGui::Button("Load .off"))
 	{	
-		CG::Load("../Objects/Object.off");
+		CG::Load("../Objects/Object.off", hi);
+
 		//fileDialog.Open();
+	}
+
+	if (ImGui::Button("Despliegue"))
+	{
+		//CG::Load("../Objects/Object.off");
+		//fileDialog.Open();
+		hi = new Object();
+
+	}
+		
+
+	if (ImGui::Button("Borrar"))
+	{
+		//CG::Load("../Objects/Object.off");
+		//fileDialog.Open();
+		
+		delete hi;
+		hi = nullptr;
+
+
+	}
+	if (hi != nullptr) {
+		hi->Bind();
+		hi->Draw();
 	}
 		//fileDialog.Display();
 

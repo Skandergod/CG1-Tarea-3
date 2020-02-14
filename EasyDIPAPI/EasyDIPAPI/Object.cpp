@@ -2,13 +2,13 @@
 //static Object* instance;
 //static unsigned int VBO, VAO, EBO;
 
-Object* Object::instance = nullptr;
+//Object* Object::instance = nullptr;
 unsigned int Object::VBO = 0;
 unsigned int Object::VAO = 0;
 
 
 Object::Object() {
-	const float sz = 1.f;
+	const float sz = 0.5f;
 	float ObjectVertices[] = {
 		// positions        	// texture Coords
 		-sz,sz,
@@ -44,11 +44,3 @@ void Object::Draw()
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-Object* Object::Instance() {
-	if (!instance)
-	{
-		instance = new Object();
-	}
-
-	return instance;
-}

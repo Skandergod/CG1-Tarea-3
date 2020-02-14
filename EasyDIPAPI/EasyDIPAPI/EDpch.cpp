@@ -55,7 +55,7 @@ RawData* EDNegativeHA(RawData* data, unsigned int imgWidth, unsigned int imgHeig
 	
 
 	unsigned int tex = GetTexture(data, imgWidth, imgHeight);
-	Object* q = Object::Instance();
+	Object* q = new Object();
 	//glActiveTexture(tex):
 	bwShader->use();
 	glBindTexture(GL_TEXTURE_2D, tex);
@@ -97,7 +97,7 @@ RawData* EDGreyscaleHA(RawData* data, unsigned int imgWidth, unsigned int imgHei
 
 
 	unsigned int tex = GetTexture(data, imgWidth, imgHeight);
-	Object* q = Object::Instance();
+	Object* q = new Object();
 	//glActiveTexture(tex):
 	bwShader->use();
 	glBindTexture(GL_TEXTURE_2D, tex);
