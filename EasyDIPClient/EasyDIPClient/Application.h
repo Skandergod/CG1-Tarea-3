@@ -15,7 +15,7 @@ class Application
 	//template <typename TT> using ptr = std::shared_ptr<TT>;
 	//ImGui::FileBrowser fileDialog;
 	GLFWwindow *window;
-
+	Shader* bwShader;
 	unsigned int texId = 0;
 	unsigned int texOGImg = 0;
 

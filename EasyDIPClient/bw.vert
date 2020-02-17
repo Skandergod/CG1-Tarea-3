@@ -1,11 +1,11 @@
 #version 330 core
 
-layout (location = 0) in vec2 pos;
-
-out vec2 fragPos;
-
+layout (location = 0) in vec3 pos;
+uniform mat4 modelMatrix;
+uniform mat4 rotMat;
+uniform mat4 transMat;
+uniform mat4 scaleMat;
 void main()
 {
-	fragPos =  pos;
-	gl_Position = vec4(fragPos, 0, 1);
+	gl_Position =  transMat * scaleMat * rotMat* vec4(pos, 1.0f);
 }

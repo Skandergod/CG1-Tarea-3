@@ -40,14 +40,15 @@ namespace CG
 		std::vector<glm::vec3> normals;
 		std::vector<std::vector<int>> faceIndex;
 		std::vector<glm::vec3> faceColors;
+		std::vector<glm::vec3> fullvertex;
 		std::string pend;
 		int act = 1, r, v, f, e = 0;
 		float  normalizerX, normalizerY, normalizerZ;
 		float x, y, z, xmax = 0.0f, ymax = 0.0f, zmax = 0.0f, xmin = 0.0f, ymin = 0.0f, zmin = 0.0f;
 
-		ifs.open("C:/Users/skandergod/Desktop/Helipuerto/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/seashell.off", std::ifstream::in);
+		ifs.open("C:/Users/Daniel/Desktop/proyectos/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/Apple.off", std::ifstream::in);
 		//C:\Users\skandergod\Desktop\Helipuerto\CG1-Tarea-3\EasyDIPClient\EasyDIPClient\Objects
-		//C:\Users\skandergod\Desktop\Helipuerto\CG1-Tarea-3\EasyDIPClient\EasyDIPClient\Objects
+		//C:\Users\Daniel\Desktop\proyectos\CG1-Tarea-3\EasyDIPClient\EasyDIPClient\Objects
 
 		std::cout << "Mierda abierta " << ifs.is_open() << std::endl;
 		while (act) {
@@ -102,9 +103,15 @@ namespace CG
 			buffer.z = std::strtof((token).c_str(), 0);
 
 
-			UPDATE_BB(xmax, xmin, buffer.x);
-			UPDATE_BB(ymax, ymin, buffer.y);
-			UPDATE_BB(zmax, zmin, buffer.z);
+			//UPDATE_BB(xmax, xmin, buffer.x);
+			xmax = std::max(xmax, buffer.x);
+			xmin = std::min(xmin, buffer.x);
+			//UPDATE_BB(ymax, ymin, buffer.y);
+			ymax = std::max(ymax, buffer.y);
+			ymin = std::min(ymin, buffer.y);
+			//UPDATE_BB(zmax, zmin, buffer.z);
+			zmax = std::max(zmax, buffer.z);
+			zmin = std::min(zmin, buffer.z);
 
 			vertex.push_back(buffer);
 
@@ -114,6 +121,7 @@ namespace CG
 		std::cout << "vertexs loaded" << std::endl;
 
 		act = 1;
+		ifs >> token;
 		for (int i = 0; i < f; ++i) {
 			std::vector<int> temp;
 			glm::vec3 color;
@@ -130,7 +138,7 @@ namespace CG
 				}
 			}*/
 
-			ifs >> token;
+			//ifs >> token;
 			r = std::stoi(token);
 			act = 1;
 
@@ -153,14 +161,19 @@ namespace CG
 			faceIndex.push_back(temp);
 
 			ifs >> token;
-			color.x = std::strtof((token).c_str(), 0);
-			ifs >> token;
-			color.y = std::strtof((token).c_str(), 0);
-			ifs >> token;
-			color.z = std::strtof((token).c_str(), 0);
+			if (std::regex_match(token, integer)) {
+				continue;
+			}
+			else {
+				color.x = std::strtof((token).c_str(), 0);
+				ifs >> token;
+				color.y = std::strtof((token).c_str(), 0);
+				ifs >> token;
+				color.z = std::strtof((token).c_str(), 0);
 
 
-			faceColors.push_back(color);
+				faceColors.push_back(color);
+			}
 			/*while (act) {
 				ifs >> token;
 				std::cout << i << std::endl;
@@ -194,34 +207,29 @@ namespace CG
 
 		maxvec = glm::vec3(xmax, ymax, zmax);
 		minvec = glm::vec3(xmin, ymin, zmin);
-
+		center = (maxvec + minvec) / 2.0f;
+		
 		normalizerX = glm::max(abs(maxvec.x), abs(minvec.x));
 		normalizerY = glm::max(abs(maxvec.y), abs(minvec.y));
 		normalizerZ = glm::max(abs(maxvec.z), abs(minvec.z));
+
+		normalizerX = glm::max(normalizerX, normalizerY);
+		normalizerX = glm::max(normalizerX, normalizerZ);
 		
 		
+		
 
-		center = (maxvec + minvec) * 0.5f; 
+		for (int it = 0; it < vertex.size()-1; ++it) {
 
-		for (std::vector<glm::vec3>::iterator it = vertex.begin(); it != vertex.end(); ++it) {
-
-			glm::vec3 temp = *it;
-			temp = temp - center;
-			if(normalizerX >= 0)
-			temp.x = temp.x / normalizerX;
-
-			if(normalizerY >= 0)
-			temp.y = temp.y / normalizerY;
-
-			if(normalizerZ >= 0)
-			temp.z = temp.z / normalizerZ;
+			
+			vertex[it] = (vertex[it] - center) / normalizerX;
 		}
 
 		for (int i = 0; i < faceIndex.size(); i++) {
 
 			std::vector<int> temp = faceIndex[i];
 			int a = temp.size(), pivot;
-			for (size_t i = 0; i < a - 2; ++i) {
+			for (int i = 0; i < a - 2; ++i) {
 
 				pivot = temp[0];
 
@@ -230,6 +238,8 @@ namespace CG
 			}
 
 		}
+
+
 		
 		/*for (auto it : faceIndex) {
 
@@ -243,6 +253,22 @@ namespace CG
 		center.x = 0.0f;
 		center.y = 0.0f;
 		center.z = 0.0f;
+
+		int n = faceIndex.size();
+		
+		for (int i = 0; i < n; i++) {
+			std::vector <int> temp;
+			temp = faceIndex[i];
+			int k = temp.size();
+			for (int j = 0; j < k; j++) {
+				fullvertex.push_back(vertex[temp[j]]);
+				//std::cout << temp[j] << std::endl;
+			}
+		}
+
+		for (int i = 0; i < fullvertex.size()-1; i++) {
+			a->vertex.push_back(fullvertex[i]);
+		}
 		std::cout << "Done!" << std::endl;
 		
 	}

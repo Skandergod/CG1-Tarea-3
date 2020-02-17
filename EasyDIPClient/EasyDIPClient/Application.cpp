@@ -6,7 +6,7 @@
 #include <fstream>
 #include <../../EasyDIPAPI/EasyDIPAPI/Object.h>
 
-extern Shader* bwShader;
+
 Object* hi;
 
 Application::Application() {
@@ -72,6 +72,7 @@ Application::Application() {
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
+	bwShader = new Shader("bw.vert", "bw.frag");
 
 	//CG::Model model = CG::Load("../Models/modelo.obj", );
 	//models.push_back(model);
@@ -142,21 +143,25 @@ void Application::MainLoop()
 void Application::Render()
 {
 
-	Object *object = new Object();
-	if (bwShader) {
+	//Object *object = new Object();
+	if (bwShader && hi) {
 		bwShader->use();
 		glActiveTexture(0);
-		glBindTexture(GL_TEXTURE_2D, texId);
+		glBindTexture(GL_TEXTURE_3D, texId);
+		bwShader->setMat4("rotMat", hi->rotateMatrix);
+		bwShader->setMat4("transMat", hi->translateMatrix);
+		bwShader->setMat4("scaleMat", hi->scaleMatrix);
 		bwShader->setInt("tex", 0);
 		bwShader->setFloat("test", test);
-		object->Bind();
-		object->Draw();
+		//bwShader->setMat4("modelMatrix", hi->modelMatrix);
+		hi->Bind();
+		hi->Draw();
 
 	}
 }
 
 void Application::ImGui()
-{
+{ 
 
 	ImGui::SliderFloat("test", &test, 0, 1);
 
@@ -204,6 +209,10 @@ void Application::ImGui()
 		//texId = GetTexture(negative.get(), img->GetWidth(), img->GetHeight());
 
 
+		delete bwShader;
+		bwShader = new Shader("bw.vert", "bw.frag");
+
+
 	}
 
 	//if (ImGui::Button("Save Image"))
@@ -229,8 +238,12 @@ void Application::ImGui()
 
 	if (ImGui::Button("Load .off"))
 	{	
-		CG::Load("../Objects/Object.off", hi);
-
+		hi = new Object();
+		CG::LoadOff("../Objects/Object.off", hi);
+		/*for (int i = 0; i < hi->vertex.size(); i++) {
+			hi->vertex[i];
+		}*/
+		hi->Init();
 		//fileDialog.Open();
 	}
 
@@ -238,7 +251,7 @@ void Application::ImGui()
 	{
 		//CG::Load("../Objects/Object.off");
 		//fileDialog.Open();
-		hi = new Object();
+		
 
 	}
 		
