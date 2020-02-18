@@ -7,7 +7,15 @@
 #include <../../EasyDIPAPI/EasyDIPAPI/Object.h>
 
 
+
 Object* hi;
+glm::vec3 rotation(0.0f);
+glm::vec3 scale(1.0f);
+glm::vec3 translation(0.0f);
+bool lines = true;
+bool points = true;
+bool fill = true;
+float color[3];
 
 Application::Application() {
 
@@ -153,10 +161,22 @@ void Application::Render()
 		bwShader->setMat4("scaleMat", hi->scaleMatrix);
 		bwShader->setInt("tex", 0);
 		bwShader->setFloat("test", test);
-		//bwShader->setMat4("modelMatrix", hi->modelMatrix);
-		hi->Bind();
-		hi->Draw();
-
+		if (fill) {
+			bwShader->setVec3("color", glm::vec3(255, 255, 255));
+			//bwShader->setMat4("modelMatrix", hi->modelMatrix);
+			hi->Bind();
+			hi->Draw();
+		}
+		if (lines) {
+			bwShader->setVec3("color", glm::vec3(0, 255, 0));
+			hi->Bind();
+			hi->DrawLines();
+		}
+		if (points) {
+			bwShader->setVec3("color", glm::vec3(255, 0, 0));
+			hi->Bind();
+			hi->DrawPoints();
+		}
 	}
 }
 
@@ -215,6 +235,9 @@ void Application::ImGui()
 
 	}
 
+	/*if (ImGui::ColorEdit3("color 1", &color,0)) {
+		std::cout << color[0] << ","<< color[1] << ","<< color[2] << std::endl;
+	}*/
 	//if (ImGui::Button("Save Image"))
 	//{
 	//	ImGui::SameLine();
@@ -235,7 +258,15 @@ void Application::ImGui()
 		filedialog.close();
 		filedialog.clearselected();
 	}*/
+	if (ImGui::Checkbox("Vertices", &points)) {
 
+	}
+	if (ImGui::Checkbox("Lineas", &lines)) {
+
+	}
+	if (ImGui::Checkbox("Relleno", &fill)) {
+
+	}
 	if (ImGui::Button("Load .off"))
 	{	
 		hi = new Object();
@@ -255,6 +286,43 @@ void Application::ImGui()
 
 	}
 		
+	if (ImGui::SliderFloat("Rot x", &rotation.x, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+		hi->Rotation(rotation);
+		hi->modelMatrix();
+	}
+
+	if (ImGui::SliderFloat("Rot y", &rotation.y, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+		hi->Rotation(rotation);
+		hi->modelMatrix();
+	}
+
+	if (ImGui::SliderFloat("Rot z", &rotation.z, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+		hi->Rotation(rotation);
+		hi->modelMatrix();
+	}
+
+
+	if (ImGui::SliderFloat("Scale x", &scale.x, 0.1f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+		scale.y = scale.x;
+		scale.z = scale.x;
+		hi->Scale(scale);
+		hi->modelMatrix();
+	}
+
+	if (ImGui::SliderFloat("tras x", &translation.x, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+		hi->Translation(translation);
+		hi->modelMatrix();
+	}
+
+	if (ImGui::SliderFloat("tras y", &translation.y, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+		hi->Translation(translation);
+		hi->modelMatrix();
+	}
+
+	if (ImGui::SliderFloat("tras z", &translation.z, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+		hi->Translation(translation);
+		hi->modelMatrix();
+	}
 
 	if (ImGui::Button("Borrar"))
 	{
@@ -266,10 +334,10 @@ void Application::ImGui()
 
 
 	}
-	if (hi != nullptr) {
+	/*if (hi != nullptr) {
 		hi->Bind();
 		hi->Draw();
-	}
+	}*/
 		//fileDialog.Display();
 
 	ImGui::End();

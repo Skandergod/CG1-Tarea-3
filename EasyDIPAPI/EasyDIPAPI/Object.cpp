@@ -41,12 +41,22 @@ void Object::Init() {
 	//glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 	//Shader::setMat4("MatrixView", matrixView);
 	glBindVertexArray(0);
+	glEnable(GL_LINE_SMOOTH);
 	
 }
 void Object::Draw()
 {
 	//glEnable(GL_DEPTH_TEST);
-	glDrawArrays(GL_LINES, 0, vertex.size()-1);
+	glDrawArrays(GL_TRIANGLES, 0, vertex.size()-1);
+}
+
+void Object::DrawLines() {
+	glDrawArrays(GL_LINES, 0, vertex.size() - 1);
+}
+
+void Object::DrawPoints() {
+	glPointSize(4.0f);
+	glDrawArrays(GL_POINTS, 0, vertex.size() - 1);
 }
 
 void Object::Rotation(glm::vec3 t) {

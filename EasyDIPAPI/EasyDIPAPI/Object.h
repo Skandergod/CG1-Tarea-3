@@ -29,6 +29,8 @@ public:
 	void Translation(glm::vec3 t);
 	void Scale(glm::vec3 t);
 	void modelMatrix();
+	void DrawLines();
+	void DrawPoints();
 	//void Object();
 	//static Object* Instance();
 };
