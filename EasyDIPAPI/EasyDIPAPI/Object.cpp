@@ -14,10 +14,14 @@ Object::Object() {
 	scale = glm::vec3(1.0f);
 	translate = glm::vec3(0.0f);
 	rotate = glm::vec3(0.0f);
+	origin = glm::vec3 (0.0f, 0.0f, -8.0f);
+	destiny = glm::vec3 (0.0f, 0.0f, 0.0f);
+
 	Rotation(rotate);
 	Scale(scale);
 	Translation(translate);
 	modelMatrix();
+	view(origin, destiny);
 }
 
 Object::~Object() {
@@ -46,7 +50,6 @@ void Object::Init() {
 }
 void Object::Draw()
 {
-	//glEnable(GL_DEPTH_TEST);
 	glDrawArrays(GL_TRIANGLES, 0, vertex.size());
 }
 
@@ -79,6 +82,21 @@ void Object::Translation(glm::vec3 t) {
 
 void Object::modelMatrix() {
 
-	matrixModel = rotateMatrix * scaleMatrix * translateMatrix;
+	matrixModel = translateMatrix * scaleMatrix * rotateMatrix;
+
+}
+
+void Object::view(glm::vec3 origin, glm::vec3 eye) {
+
+	look = glm::lookAt(eye, origin, glm::vec3(0.0f, 1.0f, 0.0f));
+	matrixView = look;
+
+}
+
+void Object::proyec(float ratio) {
+	//ratio width/height
+	orthoMatrix = glm::ortho(-4.0f, 4.0f, -4.0f, 4.0f, 0.1f, 1000.0f);
+	perspectiveMatrix = glm::perspective(45.0f, ratio, 0.1f, 1000.0f);
+	matrixProyec = perspectiveMatrix;
 
 }

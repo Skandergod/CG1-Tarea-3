@@ -12,10 +12,14 @@ Object* hi;
 glm::vec3 rotation(0.0f);
 glm::vec3 scale(1.0f);
 glm::vec3 translation(0.0f);
+glm::vec3 origin(0.0f, 0.0f, -0.1f);
+glm::vec3 destiny(0.0f, 0.0f, 100.0f);
 const float pi = 3.14159265358979323846264338327950288;
 bool lines = true;
 bool points = true;
 bool fill = true;
+bool FrontFaceCulling = true;
+bool BackFaceCulling = true;
 float color[3];
 
 Application::Application() {
@@ -123,6 +127,9 @@ void Application::MainLoop()
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
+		if (hi) {
+			hi->proyec((float)(windowWidth / windowHeight));
+		}
 		glViewport(0, 0, windowWidth, windowHeight);
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -156,12 +163,32 @@ void Application::Render()
 	if (bwShader && hi) {
 		bwShader->use();
 		glActiveTexture(0);
+		glEnable(GL_DEPTH_TEST);
 		glBindTexture(GL_TEXTURE_3D, texId);
 		bwShader->setMat4("rotMat", hi->rotateMatrix);
 		bwShader->setMat4("transMat", hi->translateMatrix);
 		bwShader->setMat4("scaleMat", hi->scaleMatrix);
+		bwShader->setMat4("modelMatrix", hi->matrixModel);
+		bwShader->setMat4("viewMatrix", hi->matrixView);
+		bwShader->setMat4("proyecMatrix", hi->matrixProyec);
 		bwShader->setInt("tex", 0);
 		bwShader->setFloat("test", test);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		if (BackFaceCulling && FrontFaceCulling) {
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_FRONT_AND_BACK);
+		}
+		else {
+			if (BackFaceCulling) {
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_FRONT);
+			}
+			if (FrontFaceCulling) {
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_BACK);
+			}
+		}
+
 		if (fill) {
 			bwShader->setVec3("color", glm::vec3(RGB(77), RGB(124), RGB(179)));
 			//bwShader->setMat4("modelMatrix", hi->modelMatrix);
@@ -262,6 +289,15 @@ void Application::ImGui()
 	if (ImGui::Checkbox("Vertices", &points)) {
 
 	}
+
+	if (ImGui::Checkbox("Front Face Culling", &FrontFaceCulling)) {
+
+	}
+
+	if (ImGui::Checkbox("Back Face Culling", &BackFaceCulling)) {
+
+	}
+
 	if (ImGui::Checkbox("Lineas", &lines)) {
 
 	}
@@ -277,6 +313,7 @@ void Application::ImGui()
 		}*/
 		hi->Init();
 		//fileDialog.Open();
+		hi->proyec((float)(windowWidth / windowHeight));
 	}
 
 	if (ImGui::Button("Despliegue"))

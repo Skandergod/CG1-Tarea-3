@@ -17,7 +17,15 @@ public:
 	glm::mat4 rotateMatrix;
 	glm::mat4 scaleMatrix;
 	glm::mat4 translateMatrix;
+	glm::mat4 look;
+	glm::mat4 proyecMatrix;
+	glm::mat4 orthoMatrix;
 	glm::mat4 matrixModel;
+	glm::mat4 matrixProyec;
+	glm::mat4 matrixView;
+	glm::mat4 perspectiveMatrix;
+	glm::vec3 origin;
+	glm::vec3 destiny;
 	std::vector<glm::vec3> vertex;
 	static unsigned int VBO, VAO;
 	Object();
@@ -31,6 +39,8 @@ public:
 	void modelMatrix();
 	void DrawLines();
 	void DrawPoints();
+	void view(glm::vec3 origin, glm::vec3 eye);
+	void proyec(float ratio);
 	//void Object();
 	//static Object* Instance();
 };
