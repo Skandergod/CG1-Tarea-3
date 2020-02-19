@@ -5,13 +5,14 @@
 #include <../../EasyDIPAPI/EasyDIPAPI/Loaders.h>
 #include <fstream>
 #include <../../EasyDIPAPI/EasyDIPAPI/Object.h>
+#include <glm/gtc/constants.hpp>
 
-
-
+#define RGB(x) (x/255.f)
 Object* hi;
 glm::vec3 rotation(0.0f);
 glm::vec3 scale(1.0f);
 glm::vec3 translation(0.0f);
+const float pi = 3.14159265358979323846264338327950288;
 bool lines = true;
 bool points = true;
 bool fill = true;
@@ -162,18 +163,18 @@ void Application::Render()
 		bwShader->setInt("tex", 0);
 		bwShader->setFloat("test", test);
 		if (fill) {
-			bwShader->setVec3("color", glm::vec3(255, 255, 255));
+			bwShader->setVec3("color", glm::vec3(RGB(77), RGB(124), RGB(179)));
 			//bwShader->setMat4("modelMatrix", hi->modelMatrix);
 			hi->Bind();
 			hi->Draw();
 		}
 		if (lines) {
-			bwShader->setVec3("color", glm::vec3(0, 255, 0));
+			bwShader->setVec3("color", glm::vec3(RGB(166), RGB(184), RGB(60)));
 			hi->Bind();
 			hi->DrawLines();
 		}
 		if (points) {
-			bwShader->setVec3("color", glm::vec3(255, 0, 0));
+			bwShader->setVec3("color", glm::vec3(RGB(255), RGB(66), RGB(60)));
 			hi->Bind();
 			hi->DrawPoints();
 		}
@@ -286,17 +287,17 @@ void Application::ImGui()
 
 	}
 		
-	if (ImGui::SliderFloat("Rot x", &rotation.x, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+	if (ImGui::SliderFloat("Rot x", &rotation.x, -pi, pi, "%.4f", 2.0f) && hi != NULL) {
 		hi->Rotation(rotation);
 		hi->modelMatrix();
 	}
 
-	if (ImGui::SliderFloat("Rot y", &rotation.y, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+	if (ImGui::SliderFloat("Rot y", &rotation.y, -pi, pi, "%.4f", 2.0f) && hi != NULL) {
 		hi->Rotation(rotation);
 		hi->modelMatrix();
 	}
 
-	if (ImGui::SliderFloat("Rot z", &rotation.z, -2.0f, 2.0f, "%.4f", 2.0f) && hi != NULL) {
+	if (ImGui::SliderFloat("Rot z", &rotation.z, -pi, pi, "%.4f", 2.0f) && hi != NULL) {
 		hi->Rotation(rotation);
 		hi->modelMatrix();
 	}

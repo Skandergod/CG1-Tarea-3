@@ -47,16 +47,16 @@ void Object::Init() {
 void Object::Draw()
 {
 	//glEnable(GL_DEPTH_TEST);
-	glDrawArrays(GL_TRIANGLES, 0, vertex.size()-1);
+	glDrawArrays(GL_TRIANGLES, 0, vertex.size());
 }
 
 void Object::DrawLines() {
-	glDrawArrays(GL_LINES, 0, vertex.size() - 1);
+	glDrawArrays(GL_LINES, 0, vertex.size());
 }
 
 void Object::DrawPoints() {
 	glPointSize(4.0f);
-	glDrawArrays(GL_POINTS, 0, vertex.size() - 1);
+	glDrawArrays(GL_POINTS, 0, vertex.size());
 }
 
 void Object::Rotation(glm::vec3 t) {

@@ -46,7 +46,7 @@ namespace CG
 		float  normalizerX, normalizerY, normalizerZ;
 		float x, y, z, xmax = 0.0f, ymax = 0.0f, zmax = 0.0f, xmin = 0.0f, ymin = 0.0f, zmin = 0.0f;
 
-		ifs.open("C:/Users/skandergod/Desktop/Helipuerto/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/Object.off", std::ifstream::in);
+		ifs.open("C:/Users/Daniel/Desktop/proyectos/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/Apple.off", std::ifstream::in);
 		//C:\Users\skandergod\Desktop\Helipuerto\CG1-Tarea-3\EasyDIPClient\EasyDIPClient\Objects
 		//C:\Users\Daniel\Desktop\proyectos\CG1-Tarea-3\EasyDIPClient\EasyDIPClient\Objects
 
@@ -219,7 +219,7 @@ namespace CG
 		
 		
 
-		for (int it = 0; it < vertex.size()-1; ++it) {
+		for (int it = 0; it < vertex.size(); ++it) {
 
 			
 			vertex[it] = (vertex[it] - center) / normalizerX;
@@ -266,7 +266,7 @@ namespace CG
 			}
 		}
 
-		for (int i = 0; i < fullvertex.size()-1; i++) {
+		for (int i = 0; i < fullvertex.size(); i++) {
 			a->vertex.push_back(fullvertex[i]);
 		}
 		std::cout << "Done!" << std::endl;
