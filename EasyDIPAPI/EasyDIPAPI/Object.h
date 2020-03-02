@@ -27,6 +27,8 @@ public:
 	glm::vec3 origin;
 	glm::vec3 destiny;
 	std::vector<glm::vec3> vertex;
+	std::vector<glm::vec3> normalCenter;
+	std::map<int, std::vector<glm::vec3>> normalmap;
 	static unsigned int VBO, VAO;
 	Object();
 	~Object();

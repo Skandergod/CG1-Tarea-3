@@ -3,6 +3,7 @@
 #include <string>
 #include <regex>
 #include <vector>
+#include <map>
 
 #define UPDATE_BB(xmax, xmin, x) if (x > xmax) {\
 	xmax = x;\
@@ -34,6 +35,7 @@ namespace CG
 		glm::vec3 center;
 		glm::vec3 maxvec;
 		glm::vec3 minvec;
+		std::vector<glm::vec3> normalCenter;
 		std::vector<glm::vec3> vertex;
 		std::vector<glm::vec3> faces;
 		std::vector<glm::vec3> colors;
@@ -41,12 +43,14 @@ namespace CG
 		std::vector<std::vector<int>> faceIndex;
 		std::vector<glm::vec3> faceColors;
 		std::vector<glm::vec3> fullvertex;
+		std::vector<glm::vec3> centers;
+		std::map<int, std::vector<glm::vec3>> normalmap;
 		std::string pend;
 		int act = 1, r, v, f, e = 0;
 		float  normalizerX, normalizerY, normalizerZ;
 		float x, y, z, xmax = 0.0f, ymax = 0.0f, zmax = 0.0f, xmin = 0.0f, ymin = 0.0f, zmin = 0.0f;
 
-		ifs.open("C:/Users/Daniel/Desktop/proyectos/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/Apple.off", std::ifstream::in);
+		ifs.open("C:/Users/skandergod/Desktop/Helipuerto/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/seashell.off", std::ifstream::in);
 		//C:\Users\skandergod\Desktop\Helipuerto\CG1-Tarea-3\EasyDIPClient\EasyDIPClient\Objects
 		//C:\Users\Daniel\Desktop\proyectos\CG1-Tarea-3\EasyDIPClient\EasyDIPClient\Objects
 
@@ -64,6 +68,8 @@ namespace CG
 		ifs >> token;
 		f = std::stoi(token);
 		ifs >> token;
+
+		
 		// ifs >> line;
 		
 
@@ -225,21 +231,6 @@ namespace CG
 			vertex[it] = (vertex[it] - center) / normalizerX;
 		}
 
-		for (int i = 0; i < faceIndex.size(); i++) {
-
-			std::vector<int> temp = faceIndex[i];
-			int a = temp.size(), pivot;
-			for (int i = 0; i < a - 2; ++i) {
-
-				pivot = temp[0];
-
-				normals.push_back(glm::cross(vertex[temp[i + 1]], vertex[temp[i + 2]]));
-
-			}
-
-		}
-
-
 		
 		/*for (auto it : faceIndex) {
 
@@ -258,17 +249,50 @@ namespace CG
 		
 		for (int i = 0; i < n; i++) {
 			std::vector <int> temp;
+			glm::vec3 centroid(0.0f, 0.0f, 0.0f);
+			glm::vec3 normaloid(0.0f, 0.0f, 0.0f);
+			glm::vec3 pivot;
+			glm::vec3 normalperVertex;
 			temp = faceIndex[i];
 			int k = temp.size();
 			for (int j = 0; j < k; j++) {
 				fullvertex.push_back(vertex[temp[j]]);
+				centroid = centroid + vertex[temp[j]];
 				//std::cout << temp[j] << std::endl;
+				
+				if (j == 2) {
+
+					normalperVertex = glm::cross(vertex[temp[j]] - vertex[temp[0]], vertex[temp[j - 1]] - vertex[temp[0]]);
+
+					normalmap[temp[0]].push_back(normalperVertex);
+					normalmap[temp[j-1]].push_back(normalperVertex);
+					normalmap[temp[j]].push_back(normalperVertex);
+
+					//centers.push_back((centroid / 3.0f));
+					a->normalCenter.push_back(centroid);
+					a->normalCenter.push_back(centroid + glm::cross(vertex[temp[j]] - vertex[temp[0]], vertex[temp[j - 1]] - vertex[temp[0]]));
+					centroid.x = 0.0f;
+					centroid.y = 0.0f;
+					centroid.z = 0.0f;
+
+				}
+				//glm::cross(vertex[temp[i + 1]], vertex[temp[i + 2]]);
 			}
 		}
 
 		for (int i = 0; i < fullvertex.size(); i++) {
 			a->vertex.push_back(fullvertex[i]);
 		}
+
+		for (int i = 0; i < normalmap.size(); i++) {
+			std::vector<glm::vec3> temp;
+			temp = normalmap[i];
+			a->normalmap[i] = temp;
+		}
+
+		
+		
+
 		std::cout << "Done!" << std::endl;
 		
 	}
