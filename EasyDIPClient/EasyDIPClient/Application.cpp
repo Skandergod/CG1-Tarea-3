@@ -20,6 +20,7 @@ bool points = true;
 bool fill = true;
 bool FrontFaceCulling = true;
 bool BackFaceCulling = true;
+bool Normals = true;
 float color[3];
 
 Application::Application() {
@@ -205,6 +206,9 @@ void Application::Render()
 			hi->Bind();
 			hi->DrawPoints();
 		}
+		if (Normals) {
+			hi->drawNormals();
+		}
 	}
 }
 
@@ -302,6 +306,9 @@ void Application::ImGui()
 
 	}
 	if (ImGui::Checkbox("Relleno", &fill)) {
+
+	}
+	if (ImGui::Checkbox("Normals", &Normals)) {
 
 	}
 	if (ImGui::Button("Load .off"))

@@ -43,6 +43,7 @@ public:
 	void DrawPoints();
 	void view(glm::vec3 origin, glm::vec3 eye);
 	void proyec(float ratio);
+	void drawNormals();
 	//void Object();
 	//static Object* Instance();
 };

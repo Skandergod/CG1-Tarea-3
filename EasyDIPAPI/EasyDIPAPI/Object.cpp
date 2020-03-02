@@ -62,6 +62,15 @@ void Object::DrawPoints() {
 	glDrawArrays(GL_POINTS, 0, vertex.size());
 }
 
+void Object::drawNormals() {
+	glBegin(GL_LINES);
+	for (int i = 0; i < normalCenter.size()-1; i++) {
+		glVertex3f(normalCenter[i].x, normalCenter[i].y, normalCenter[i].z);
+		//glVertex3f(normalCenter[i+1].x, normalCenter[i+1].y, normalCenter[i+1].z);
+	}
+	glEnd();
+}
+
 void Object::Rotation(glm::vec3 t) {
 	rotate = t;
 	rotateMatrix = glm::mat4(1.0f);
