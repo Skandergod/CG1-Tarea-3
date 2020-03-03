@@ -207,7 +207,7 @@ void Application::Render()
 			hi->DrawPoints();
 		}
 		if (Normals) {
-			hi->drawNormals();
+			//hi->drawNormals();
 		}
 	}
 }
@@ -315,6 +315,18 @@ void Application::ImGui()
 	{	
 		hi = new Object();
 		CG::LoadOff("../Objects/Object.off", hi);
+		/*for (int i = 0; i < hi->vertex.size(); i++) {
+			hi->vertex[i];
+		}*/
+		hi->Init();
+		//fileDialog.Open();
+		hi->proyec((float)(windowWidth / windowHeight));
+	}
+
+	if (ImGui::Button("Load .obj"))
+	{
+		hi = new Object();
+		CG::LoadObj("../Objects/Object.off", hi);
 		/*for (int i = 0; i < hi->vertex.size(); i++) {
 			hi->vertex[i];
 		}*/
