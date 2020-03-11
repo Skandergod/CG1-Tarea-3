@@ -37,11 +37,12 @@ namespace CG
 		std::vector<std::vector<int>> polyLine;
 		std::string token;
 		glm::vec3 centroid(0.0f, 0.0f, 0.0f);
-		std::vector<glm::vec3> fullvertex;
+		std::vector<glm::vec3> &fullvertex = a->vertex;
+		std::vector<int> temp;
 		float  normalizerX, normalizerY, normalizerZ;
 		float x, y, z, xmax = -99999999990.0f, ymax = -9999999990.0f, zmax = -999999990.0f, xmin = 9999999999990.0f, ymin = 999999999990.0f, zmin = 999999999990.0f;
 
-		ifs.open("C:/Users/skandergod/Desktop/Helipuerto/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/Umbrella.obj", std::ifstream::in);
+		ifs.open("C:/Users/Daniel/Desktop/proyectos/CG1-Tarea-3/EasyDIPClient/EasyDIPClient/Objects/Cube.obj", std::ifstream::in);
 		std::cout << ifs.is_open() << std::endl;
 		ifs >> token;
 
@@ -134,14 +135,17 @@ namespace CG
 				ifs >> token;
 				if (std::regex_match(token, integer)) {
 					while (std::regex_match(token, integer)) {
-						temp.push_back(std::stoi(token));
+						std::cout << token << std::endl;
+						temp.push_back(std::stoi(token)-1);
 						ifs >> token;
 					}
+					//faceIndex.push_back(temp);
+					std::cout << token << std::endl;
 					faceIndex.push_back(temp);
-					std::cout << "Face Loaded" << std::endl;
+					//ifs >> token;
 				}
 				else {
-					std::string a, b;
+					std::string a = "", b = "";
 					bool d = true, c = true;
 					for (int i = 0; i < token.size(); i++) {
 						if (token[i] == '/') {
@@ -159,7 +163,7 @@ namespace CG
 
 					std::cout << "Baina Loca" << std::endl;
 					while (std::regex_match(a, integer)) {
-						temp.push_back(std::stoi(a));
+						temp.push_back(std::stoi(a)-1);
 						std::cout << a << std::endl;
 						a = "";
 						b = "";
@@ -182,6 +186,8 @@ namespace CG
 							a = "a";
 						}
 					}
+					//
+					//std::cout << a << std::endl;
 					faceIndex.push_back(temp);
 					std::cout << "Face Loaded" << std::endl;
 					//ifs >> token;*/
@@ -217,42 +223,62 @@ namespace CG
 		normalizerX = glm::max(normalizerX, normalizerY);
 		normalizerX = glm::max(normalizerX, normalizerZ);
 
-		for (int it = 0; it < vertex.size(); ++it) {
+		//for (int it = 0; it < vertex.size(); ++it) {
 
-
-			vertex[it] = (vertex[it] -  center ) / normalizerX;
-		}
+		//	std::cout << "(" << vertex[it].x << "," << vertex[it].y << "," << vertex[it].z << ")" << std::endl;
+		//	vertex[it] = (vertex[it] -  center) / abs(normalizerX);
+		//	//std::cout << "(" << vertex[it].x << "," << vertex[it].y << "," << vertex[it].z << ")" << std::endl; 
+		//}
 
 		int n = faceIndex.size();
 
 		std::cout << "Almost Done" << std::endl;
 
-		for (int i = 0; i < n; i++) {
+		/*for (int i = 0; i < n; i++) {
 			std::vector<int> temp = faceIndex[i];
-			for (int j = 1; j < temp.size()-1; j++) {
-				fullvertex.push_back(vertex[temp[0]-1]);
-				fullvertex.push_back(vertex[temp[j]-1]);
-				fullvertex.push_back(vertex[temp[j+1]-1]);
-				//centroid = centroid + vertex[temp[j]-1];
-				/*if (j == 2) {
-					glm::vec3 normaloid = glm::cross(vertex[temp[j+1]-1] - vertex[temp[j]-1], vertex[temp[j+2]-1] - vertex[temp[0]-1]);
+			for (int j = 1; j < temp.size() - 1; j++) {
+				int d = temp[0];
+				int b = temp[j];
+				int c = temp[j+1];
+
+				std::cout << "(" << d+1 << "," << b+1 << "," << c+1 << ")" << std::endl;
+				std::cout << "(" << vertex[d].x << "," << vertex[d].y << "," << vertex[d].z << ")" << std::endl;
+				std::cout << "(" << vertex[b].x << "," << vertex[b].y << "," << vertex[b].z << ")" << std::endl;
+				std::cout << "(" << vertex[c].x << "," << vertex[c].y << "," << vertex[c].z << ")" << std::endl;
+				fullvertex.push_back(vertex[d]);
+				fullvertex.push_back(vertex[b]);
+				fullvertex.push_back(vertex[c]);
+				centroid = centroid + vertex[temp[j]-1];
+
+					glm::vec3 normaloid = glm::cross(vertex[c] - vertex[b], vertex[c] - vertex[d]);
 					a->normalCenter.push_back(centroid);
+					centroid = (vertex[d] + vertex[b] + vertex[c]) / 3.0f;
 					if (normaloid != glm::vec3(0.0f, 0.0f, 0.0f)) {
 						a->normalCenter.push_back(0.1f * (glm::normalize(normaloid)));
 					}
 					else {
 						a->normalCenter.push_back(0.1f * (normaloid));
 					}
-				}*/
+
 			}
 			centroid = glm::vec3(0.0f, 0.0f, 0.0f);
-		}
+		}*/
+
+		temp = faceIndex[0];
+		fullvertex.push_back(vertex[temp[0]]);
+		fullvertex.push_back(vertex[temp[2]]);
+		fullvertex.push_back(vertex[temp[1]]);
+		temp = faceIndex[1];
+		fullvertex.push_back(vertex[temp[0]]);
+		fullvertex.push_back(vertex[temp[2]]);
+		fullvertex.push_back(vertex[temp[1]]);
 
 		std::cout << "Done" << std::endl;
 
-		for (int i = 0; i < fullvertex.size(); i++) {
+		/*for (int i = 0; i < fullvertex.size(); i++) {
+			std::cout << "(" << fullvertex[i].x << "," << fullvertex[i].y << "," << fullvertex[i].z << ")" << std::endl;
 			a->vertex.push_back(fullvertex[i]);
-		}
+		}*/
 	
 	}
 

@@ -45,7 +45,7 @@ void Object::Init() {
 	//glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 	//Shader::setMat4("MatrixView", matrixView);
 	glBindVertexArray(0);
-	glEnable(GL_LINE_SMOOTH);
+	//glEnable(GL_LINE_SMOOTH);
 	
 }
 void Object::Draw()
@@ -54,7 +54,7 @@ void Object::Draw()
 }
 
 void Object::DrawLines() {
-	glDrawArrays(GL_LINES, 0, vertex.size());
+	glDrawArrays(GL_LINE_STRIP, 0, vertex.size());
 }
 
 void Object::DrawPoints() {
